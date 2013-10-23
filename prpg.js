@@ -97,40 +97,40 @@ INT, Matk, Mdef, Instinct, MP, Energy
 	var jobArr = arrayize(jobObj);
 	var classArr = arrayize(classObj);
 	var rankCollection = new Ext.util.MixedCollection;
-	rankCollection.add('F', {multiplier: 0});
-	rankCollection.add('F+', {multiplier: 1});
-	rankCollection.add('F++', {multiplier: 2});
-	rankCollection.add('E', {multiplier: 5});
-	rankCollection.add('E+', {multiplier: 6});
-	rankCollection.add('E++', {multiplier: 7});
-	rankCollection.add('D', {multiplier: 10});
-	rankCollection.add('D+', {multiplier: 12});
-	rankCollection.add('D++', {multiplier: 15});
-	rankCollection.add('C', {multiplier: 20});
-	rankCollection.add('C+', {multiplier: 22});
-	rankCollection.add('C++', {multiplier: 25});
-	rankCollection.add('B', {multiplier: 30});
-	rankCollection.add('B+', {multiplier: 33});
-	rankCollection.add('B++', {multiplier: 37});
-	rankCollection.add('A', {multiplier: 45});
-	rankCollection.add('A+', {multiplier: 48});
-	rankCollection.add('A++', {multiplier: 52});
-	rankCollection.add('S', {multiplier: 60});
-	rankCollection.add('S+', {multiplier: 64});
-	rankCollection.add('S++', {multiplier: 70});
-	rankCollection.add('SS', {multiplier: 80});
-	rankCollection.add('SS+', {multiplier: 84});
-	rankCollection.add('SS++', {multiplier: 90});
-	rankCollection.add('SSS', {multiplier: 100});
-	rankCollection.add('SSS+', {multiplier: 125});
-	rankCollection.add('SSS++', {multiplier: 150});
-	rankCollection.add('U', {multiplier: 200});
+	rankCollection.add('F', {value: 0});
+	rankCollection.add('F+', {value: 20});
+	rankCollection.add('F++', {value: 50});
+	rankCollection.add('E', {value: 100});
+	rankCollection.add('E+', {value: 120});
+	rankCollection.add('E++', {value: 150});
+	rankCollection.add('D', {value: 200});
+	rankCollection.add('D+', {value: 220});
+	rankCollection.add('D++', {value: 250});
+	rankCollection.add('C', {value: 300});
+	rankCollection.add('C+', {value: 320});
+	rankCollection.add('C++', {value: 350});
+	rankCollection.add('B', {value: 400});
+	rankCollection.add('B+', {value: 420});
+	rankCollection.add('B++', {value: 450});
+	rankCollection.add('A', {value: 500});
+	rankCollection.add('A+', {value: 520});
+	rankCollection.add('A++', {value: 550});
+	rankCollection.add('S', {value: 600});
+	rankCollection.add('S+', {value: 620});
+	rankCollection.add('S++', {value: 650});
+	rankCollection.add('SS', {value: 700});
+	rankCollection.add('SS+', {value: 720});
+	rankCollection.add('SS++', {value: 750});
+	rankCollection.add('SSS', {value: 800});
+	rankCollection.add('SSS+', {value: 820});
+	rankCollection.add('SSS++', {value: 850});
+	rankCollection.add('U', {value: 1000});
 	var levelBonuses = [
-		[55, 500],
-		[75, 1000],
-		[100, 2500],
-		[150, 5000],
-		[200, 10000]
+		[55, 200],
+		[75, 350],
+		[100, 1000],
+		[150, 1350],
+		[200, 2000]
 	];
 
     var StatTypes = {
@@ -152,8 +152,16 @@ INT, Matk, Mdef, Instinct, MP, Energy
 		}
 		return bonusNumber;
 	}
+    /**
+     * Power level = rankValue + level*10 + jobChangeBonus
+     * 
+     * @param rankObj $rankObj 
+     * @param level $level 
+     * @access public
+     * @return int
+     */
 	function getPowerLevel(rankObj, level) {
-		var valWithoutBonus = rankObj.multiplier * level;
+		var valWithoutBonus = rankObj.value + level * 10;
 		return valWithoutBonus + getBonusPoints(level);
 	}
 	var ranks = rankCollection.keys.slice();
@@ -508,7 +516,7 @@ INT, Matk, Mdef, Instinct, MP, Energy
 							var statValue;
 							var i, j;
 							var isEnergy = false;
-							var basePowerLevel = rankCollection.items[baseStatValue].multiplier;
+							var basePowerLevel = rankCollection.items[baseStatValue].value;
 							var powerLevel;
 							var changePowerLevel = function (level, rankString) {
 								if (rankString) {
@@ -540,7 +548,7 @@ INT, Matk, Mdef, Instinct, MP, Energy
 								if (StatTypes.ENERGY == i) {
 									isEnergy = true;
 									statValue = 0;
-									powerLevel = rankCollection.items[statValue].multiplier;
+									powerLevel = rankCollection.items[statValue].value;
 								}
 								statValue = 11 == i ? 0 : baseStatValue; 
 								config = {
