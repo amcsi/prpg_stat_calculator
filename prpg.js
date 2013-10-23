@@ -132,6 +132,10 @@ INT, Matk, Mdef, Instinct, MP, Energy
 		[150, 5000],
 		[200, 10000]
 	];
+
+    var StatTypes = {
+        ENERGY: 11
+    };
 		
 	function getBonusPoints(level) {
 		var bonus;
@@ -487,10 +491,14 @@ INT, Matk, Mdef, Instinct, MP, Energy
 							var count = this.getRowCount();
 							var total = 0;
 							for (i = 0; i < count; i++) {
-								total += parseInt(this.getPowerLevelComp(i).getValue());
+								total += parseInt(this.getPowerLevelComp(i).getValue(), 10);
 							}
+                            // the totalFair value is the total of all stats anyone can have
+                            var energyPowerObj = this.getPowerLevelComp(StatTypes.ENERGY);
+                            var totalFair = total - parseInt(energyPowerObj.getValue(), 10);
 							this.ownerCt.getComponent('total').update({
-								powerLevel: total
+                                powerLevel: total,
+                                powerLevelFair: totalFair
 							});
 						},
 						items: (function () {
@@ -529,8 +537,7 @@ INT, Matk, Mdef, Instinct, MP, Energy
 								isEnergy = false;
 								statValue = baseStatValue;
 								powerLevel = basePowerLevel;
-								// energy
-								if (11 == i) {
+								if (StatTypes.ENERGY == i) {
 									isEnergy = true;
 									statValue = 0;
 									powerLevel = rankCollection.items[statValue].multiplier;
@@ -572,10 +579,13 @@ INT, Matk, Mdef, Instinct, MP, Energy
 						itemId: "total",
 						xtype: "box",
 						data: {
+							powerLevelFair: 10 * 20,
 							powerLevel: 11 * 20
 						},
 						tpl: [
-							'Totál power level: <strong>{powerLevel}</strong>'
+                            '<p>Totál power level:<br>' +
+                            'Természetesen: <strong>{powerLevelFair}</strong><br>' +
+							'Energyvel: <strong>{powerLevel}</strong></p>'
 						]
 					}
 				]
